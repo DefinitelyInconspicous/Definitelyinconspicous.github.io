@@ -78,13 +78,14 @@ header.header {
     align-items: center; /* vertically center content */
     justify-content: center; /* center horizontally in container */
     padding: 0;
+    
 }
 
 /* Make header content responsive */
 .header-content {
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* left-align content */
+    justify-content: center; /* left-align content */
     gap: 4rem;
     width: 100%;
     max-width: 1200px;
