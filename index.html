@@ -138,7 +138,8 @@
                         </div>
                         <div class="card-content">
                             <h3>Macropad</h3>
-                            <p>Designed and developed a Macropad for personal productivity over 1 month as part of Hack Club's Hackpad V1 Program, improving PCB
+                            <p>Designed and developed a Macropad for personal productivity over 1 month as part of Hack
+                                Club's Hackpad V1 Program, improving PCB
                                 design and component placement, as well as soldering and 3D Design.</p>
                             <div class="tags"><span>Hardware</span><span>Design</span></div>
                         </div>
@@ -151,7 +152,7 @@
                     <div>
                         <h2>Education</h2>
                         <h3 class="school-name">School of Science and Technology, Singapore</h3>
-                        <p class="education-meta">Mainstream · 2023 — 2026</p>
+                        <p class="education-meta">Mainstream O-Level · 2023 — 2026</p>
                     </div>
                 </div>
 
@@ -160,27 +161,35 @@
 
                 <div class="event-grid">
 
-                <div class="event-card">
-                    <div class="event-image">
-                        <img src="Images/UK.jpg" alt="UK Exchange">
+                    <div class="event-card">
+                        <div class="event-image">
+                            <img src="Images/UK.jpg" alt="UK Exchange">
+                        </div>
+                        <div class="event-card-body">
+                            <h4>2025 United Kingdom (Maidstone) International Exchange</h4>
+                            <p>Engaged with peers from the UK (School of Science and Technology, Maidstone) in a project
+                                focussing on Environmental Sustainability in Housing</p>
+                        </div>
                     </div>
-                    <div class="event-card-body">
-                        <h4>2025 United Kingdom (Maidstone) International Exchange</h4>
-                        <p>Engaged with peers from the UK (School of Science and Technology, Maidstone) in a project
-                            focussing on Environmental Sustainability in Housing</p>
-                    </div>
-                </div>
-                <div class="event-card">
-                    <div class="event-image">
-                        <img src="Images/BSS.jpg" alt="BSSxSST Exchange">
-                    </div>
-                    <div class="event-card-body">
-                        <h4>2025 BSS x SST International Exchange</h4>
-                        <p>Engaged with peers from Busan (Busan Science High School) in a project focussing on Ocean
-                            Sustainability; specifically ship corrosion and pH Levels</p>
+                    <div class="event-card" data-pdf="Documents/kr.pdf">
+                        <div class="event-image">
+                            <img src="Images/BSS.jpg" alt="BSSxSST Exchange">
+                        </div>
+                        <div class="event-card-body">
+                            <h4>2025 BSS x SST International Exchange</h4>
+                            <p>Engaged with peers from Busan (Busan Science High School) in a project focussing on Ocean
+                                Sustainability; specifically ship corrosion and pH Levels</p>
+                        </div>
+
                     </div>
 
-                </div>
+                    <div class="education-header">
+                        <div>
+                            <h3 class="school-name">St Gabriel's Primary School</h3>
+                            <p class="education-meta">Mainstream PSLE · 2017 — 2022</p>
+                        </div>
+                    </div>
+
             </section>
 
             </section>
@@ -335,12 +344,10 @@
         </footer>
     </div>
 
-    <!-- PDF / Image Modal -->
     <div id="pdfModal" class="pdf-modal">
         <div class="pdf-backdrop"></div>
 
         <div class="pdf-container">
-            <!-- Top Bar -->
             <div class="pdf-bar">
                 <span class="pdf-title">Certificate</span>
                 <button class="pdf-close">&times;</button>
@@ -348,7 +355,11 @@
 
             <!-- Viewer Area -->
             <div class="pdf-viewer">
-                <iframe id="pdfFrame" class="viewer" frameborder="0"></iframe>
+                <object id="pdfObject" type="application/pdf" width="100%" height="100%">
+                    <p>It appears your browser doesn't support PDF previews.
+                        <a id="downloadFallback" href="#">Click here to download the deck.</a>
+                    </p>
+                </object>
                 <img id="imgFrame" class="viewer" />
             </div>
         </div>
@@ -394,25 +405,31 @@
             }
         });
 
-        document.querySelectorAll('.project-card').forEach(card => {
+        // Add pdfObject to your selector at the top of your script
+        const pdfObject = document.getElementById('pdfObject');
+        const downloadFallback = document.getElementById('downloadFallback');
+
+        document.querySelectorAll('.project-card, .event-card').forEach(card => {
             const attachment = card.getAttribute('data-pdf');
 
             if (attachment) {
-                card.style.cursor = 'pointer';
-
                 card.addEventListener('click', (e) => {
                     const file = attachment.toLowerCase();
-                    const projectTitle = card.querySelector('h3')?.textContent || 'Attachment';
+                    const projectTitle = card.querySelector('h3, h4')?.textContent || 'Attachment';
 
                     titleDisplay.textContent = projectTitle;
 
-                    pdfFrame.style.display = 'none';
+                    // Reset visibility
+                    pdfObject.style.display = 'none';
                     imgFrame.style.display = 'none';
-                    imgFrame.classList.remove('zoomed');
 
                     if (file.endsWith('.pdf')) {
-                        pdfFrame.src = attachment + '#view=FitH';
-                        pdfFrame.style.display = 'block';
+                        // The "#view=Fit" forces the browser to treat it as a document viewer
+                        const pdfPath = attachment + '#view=FitH&scrollbar=1&toolbar=1';
+
+                        pdfObject.data = pdfPath;
+                        downloadFallback.href = attachment;
+                        pdfObject.style.display = 'block';
                     } else {
                         imgFrame.src = attachment;
                         imgFrame.style.display = 'block';
@@ -424,7 +441,7 @@
         });
 
         function closeModal() {
-            pdfFrame.src = '';
+            pdfObject.data = '';
             imgFrame.src = '';
             imgFrame.classList.remove('zoomed');
             modal.classList.remove('active');

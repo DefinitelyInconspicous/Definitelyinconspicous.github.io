@@ -629,6 +629,7 @@ footer {
 #pdfFrame {
     width: 100%;
     height: 100%;
+    border: none;
     display: none;
 }
 
@@ -689,12 +690,21 @@ footer {
 .pdf-viewer {
     height: calc(100% - 48px);
     width: 100%;
-    background: #000;
-    overflow: auto; /* This allows scrolling when zoomed */
+    background: #1a1a1a; /* Darker background for contrast */
+    overflow: hidden; /* Let the iframe handle scrolling */
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Keeps image at top when zooming */
+    align-items: center;
 }
+
+#pdfObject {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: none;
+}
+
+
 /* Viewer content */
 .viewer {
     width: 100%;
@@ -806,6 +816,22 @@ footer {
     font-size: 0.9rem;
     color: var(--text-muted);
     line-height: 1.6;
+}
+
+/* Enable pointer cursor and indicator for event cards with attachments */
+.event-card[data-pdf] {
+    cursor: pointer;
+}
+
+.event-card[data-pdf] h4::after {
+    content: ' \f06e'; 
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 0.8rem;
+    color: var(--primary);
+    vertical-align: middle;
+    margin-left: 8px;
+    opacity: 0.7;
 }
 
 @media (max-width: 600px) {
