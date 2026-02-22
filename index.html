@@ -69,30 +69,42 @@
             </div>
             <div class="card-content">
                 <h3>labX</h3>
-                <p>Designed and developed an iOS lab booking system in a team of 4; used by science departments, focusing on scheduling efficiency and usability.</p>
+                <p>Designed and developed an iOS lab booking system in a team of 4 over the course of 2 years; used by science departments, focusing on scheduling efficiency and usability.</p>
                 <div class="tags"><span>SwiftUI</span><span>teamX</span></div>
             </div>
             <a href="https://apps.apple.com/sg/app/labx/id6749056493" class="project-link">App Store <i class="fas fa-external-link-alt"></i></a>
         </div>
 
-        <div class="project-card" >
+                <div class="project-card">
+            <div class="project-image">
+                <img src="Images/moneytree.png" alt="Money Tree Screenshot">
+            </div>
+            <div class="card-content">
+                <h3>Money Tree</h3>
+                <p>Designed and developed an iOS app for managing personal finances in a team of 4 under 70 Hours; focused on gamification and data visualization as part of 2024 Swift Accelerator Program's Challenge 3</p>
+                <div class="tags"><span>SwiftUI</span><span>teamX</span></div>
+            </div>
+            <a href="https://apps.apple.com/sg/app/money-tree-expense-tracker/id6738333578" class="project-link">App Store <i class="fas fa-external-link-alt"></i></a>
+        </div>
+
+        <div class="project-card" data-pdf="posters/rho.png">
             <div class="project-image">
                 <img src="Images/hmgis.jpg" alt="Voice Automated Car Screenshot">
             </div>
             <div class="card-content">
                 <h3>Voice Automated Car</h3>
-                <p>Passenger-side voice automation in a team of 4 for Hyundai Motor Group Techbot Challenge 2025.</p>
-                <div class="tags"><span>HMGIS</span><span>Innovation</span></div>
+                <p>Passenger-side voice automation in a team of 4 for Hyundai Motor Group Techbot Challenge 2025. Achieved Top 6.</p>
+                <div class="tags"><span>HMGIS</span><span>Accessibility</span></div>
             </div>
         </div>
 
-        <div class="project-card" data-pdf="posters/sistemic.png">
+        <div class="project-card" data-pdf="posters/piezo.png">
             <div class="project-image">
                 <img src="Images/piezo.jpg" alt="Piezoelectric Energy Regeneration Screenshot">
             </div>
             <div class="card-content">
                 <h3>Piezoelectric Energy Regeneration</h3>
-                <p>Regenerative energy system developed in a team of 3 for Singapore International STEM Innovation Challenge 2025. Achieved Top 6.</p>
+                <p>Regenerative energy system developed in a team of 3 for Singapore International STEM Innovation Challenge 2025. </p>
                 <div class="tags"><span>SISTEMIC</span><span>Sustainability</span></div>
             </div>
         </div>
@@ -120,6 +132,7 @@
             <h4>SST Inc.</h4>
             <span class="timeline-date">May 2023 — Present</span>
         </div>
+        <p class="role-title">Employee (May 2023 — Present)</p>
         <p class="role-title">Chief Operating Officer (Feb 2025 — Present)</p>
             <ol class="role-desc">
                 <li>Managed Administrative matters for SST Inc. Sessions</li>
@@ -287,34 +300,70 @@ const pdfFrame = document.getElementById('pdfFrame');
 const imgFrame = document.getElementById('imgFrame');
 const closeBtn = document.querySelector('.pdf-close');
 const backdrop = document.querySelector('.pdf-backdrop');
+const titleDisplay = document.querySelector('.pdf-title');
 
-document.querySelectorAll('.project-card[data-pdf]').forEach(card => {
-    card.style.cursor = 'pointer';
+imgFrame.addEventListener('click', (e) => {
+    e.stopPropagation();
 
-    card.addEventListener('click', () => {
-        const file = card.dataset.pdf.toLowerCase();
-        document.querySelector('.pdf-title').textContent =
-            card.querySelector('h3')?.textContent || 'Certificate';
+    if (!imgFrame.classList.contains('zoomed')) {
+        // 1. Get dimensions of the image
+        const rect = imgFrame.getBoundingClientRect();
 
-        pdfFrame.style.display = 'none';
-        imgFrame.style.display = 'none';
+        // 2. Calculate click position in percentage (0 to 100)
+        // e.clientX is mouse pos, rect.left is image start pos
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-        if (file.endsWith('.pdf')) {
-            pdfFrame.src = file + '#view=FitH';
-            pdfFrame.style.display = 'block';
-        } else {
-            imgFrame.src = file;
-            imgFrame.style.display = 'block';
-        }
-
-        modal.classList.add('active');
-    });
+        // 3. Set the origin of the transform to that specific point
+        imgFrame.style.transformOrigin = `${x}% ${y}%`;
+        
+        // 4. Add the zoomed class to trigger the scale(2)
+        imgFrame.classList.add('zoomed');
+    } else {
+        // Reset zoom
+        imgFrame.classList.remove('zoomed');
+        // Optional: Reset origin after transition finishes for consistency
+        setTimeout(() => {
+            imgFrame.style.transformOrigin = 'center center';
+        }, 300);
+    }
 });
 
+document.querySelectorAll('.project-card').forEach(card => {
+    const attachment = card.getAttribute('data-pdf');
+    
+    if (attachment) {
+        card.style.cursor = 'pointer';
+
+        card.addEventListener('click', (e) => {
+            // Prevent zoom click from closing modal if clicking card (not applicable here but good practice)
+            const file = attachment.toLowerCase();
+            const projectTitle = card.querySelector('h3')?.textContent || 'Attachment';
+
+            titleDisplay.textContent = projectTitle;
+            
+            // Reset states
+            pdfFrame.style.display = 'none';
+            imgFrame.style.display = 'none';
+            imgFrame.classList.remove('zoomed'); 
+
+            if (file.endsWith('.pdf')) {
+                pdfFrame.src = attachment + '#view=FitH';
+                pdfFrame.style.display = 'block';
+            } else {
+                imgFrame.src = attachment;
+                imgFrame.style.display = 'block';
+            }
+
+            modal.classList.add('active');
+        });
+    }
+});
 
 function closeModal() {
     pdfFrame.src = '';
     imgFrame.src = '';
+    imgFrame.classList.remove('zoomed'); 
     modal.classList.remove('active');
 }
 
