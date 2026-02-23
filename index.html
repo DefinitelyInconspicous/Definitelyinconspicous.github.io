@@ -272,6 +272,7 @@
                             <li>Managed Administrative matters for SST Inc. Sessions</li>
                             <li>Worked on improving existing systems by improving google sheet organisation and
                                 processes</li>
+                                <li>Worked on an Attendance Taking app utilising NFC Cards to solve issues created by the 2026 MOE Schools Phone</li>
                         </ol>
                         <p class = "reveal role-title">Chief Technology Officer (iOS) (Feb 2024 — Feb 2025)</p>
                         <ol class = "reveal role-desc">
@@ -445,18 +446,11 @@
             e.stopPropagation();
 
             if (!imgFrame.classList.contains('zoomed')) {
-                // 1. Get dimensions of the image
                 const rect = imgFrame.getBoundingClientRect();
-
-                // 2. Calculate click position in percentage (0 to 100)
-                // e.clientX is mouse pos, rect.left is image start pos
                 const x = ((e.clientX - rect.left) / rect.width) * 100;
                 const y = ((e.clientY - rect.top) / rect.height) * 100;
 
-                // 3. Set the origin of the transform to that specific point
                 imgFrame.style.transformOrigin = `${x}% ${y}%`;
-
-                // 4. Add the zoomed class to trigger the scale(2)
                 imgFrame.classList.add('zoomed');
             } else {
                 imgFrame.classList.remove('zoomed');
@@ -466,7 +460,6 @@
             }
         });
 
-        // Add pdfObject to your selector at the top of your script
         const pdfObject = document.getElementById('pdfObject');
         const downloadFallback = document.getElementById('downloadFallback');
 
@@ -514,11 +507,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const revealOnScroll = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            // If the element is in view
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
             } 
-            // If the element leaves the view (scrolling back up or past it)
             else {
                 entry.target.classList.remove('active');
             }
