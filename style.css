@@ -214,16 +214,17 @@ h2 {
 
 .project-card:hover {
     border-color: var(--primary);
-    transform: translateY(-10px);
+    transform: translateY(-8px);
     background: rgba(255,255,255,0.05);
 }
 
 .project-image {
-    flex: 0 0 250px; /* do not shrink, fixed max width */
-    max-width: 250px; /* maximum width for the image */
+    
     display: flex;
     align-items: center;
     justify-content: center;
+    align-content: center;
+    align-self: flex-start
 }
 
 .project-image img {
@@ -839,3 +840,31 @@ footer {
         grid-template-columns: 1fr; /* Single column on very small screens */
     }
 }
+
+/* =========================
+   Scroll Reveal Animations
+========================= */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+    /* Transition: duration for appearing, then duration for resetting */
+    transition: opacity 0.4s ease-out, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    visibility: hidden;
+    will-change: transform, opacity; /* Optimizes performance */
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+}
+
+/* OPTIONAL: Staggering
+   If you want grid items to pop up one-by-one, 
+   add these to your CSS:
+*/
+.project-grid .reveal:nth-child(2) { transition-delay: 0.1s; }
+.project-grid .reveal:nth-child(3) { transition-delay: 0.15s; }
+
+.event-grid .reveal:nth-child(2) { transition-delay: 0.1s; }
+.event-grid .reveal:nth-child(3) { transition-delay: 0.15s; }
